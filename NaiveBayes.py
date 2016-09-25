@@ -3,20 +3,26 @@ import numpy as np
 
 df = pd.read_csv('house-votes-84.data')
 
+
 #deletes row if there is a NA
 def prob (party,i,c):
     col = party[[i]]
     col = col[col[[0]] != '?']
-    yes = col[col[[0]] == c]
-    return yes.count() / col.count()
+    yes = col[col[[0]] == 'y']
+    return (yes.count() / col.count())[0]
 
-Republican = df[df['p'] == 'republican']
-probR = Republican.count() /  df.count()
+def bayes(person, party):
+    billnum =1;
+    p=1
+    Party = df[df['p'] == party]
+    for vote in person:
+        p *= (prob(Party, billnum, vote))
+        billnum +=1
+    print p
+    p *= (Party.count() / df.count())[0]
+    print p
+
+
+
 person = ['y','y','y','n','y','y','n','n','n','n','y','n','y','y','y','y']
-p = 1;
-bilnum = 1
-for vote in person:
-    p = p * prob(Republican, bilnum, vote)
-    bilnum +=1
-
-print p
+bayes(person, 'democrat')
