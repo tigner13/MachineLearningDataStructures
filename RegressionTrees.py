@@ -19,5 +19,12 @@ def p(field):
 # labled.
 # example of impurity: a set with all true/ a set with all false
 # equation: G(t) = 1- p(t)^2 - (1 - p(t))^2
-def g(field):
+def gini(field):
      return (1 - (p(field)*p(field)) - ((1 -  p(field))*(1 - p(field))))
+
+#This choses what collumn to split at by using gini
+def split(field):
+    splitCol = 1
+    for column in field:
+        if (gini(field[column]) > gini(field[splitCol])) splitCol = column
+    return splitCol
