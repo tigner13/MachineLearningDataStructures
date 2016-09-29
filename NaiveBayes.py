@@ -1,3 +1,10 @@
+# Naive Bayes by Elizabeth Tigner
+# I applied Bayes theorem to a data set on congressional votes.
+# Naive Bayes is a type of supervised classification where it returns
+# a probability that a certian person is of a policial party or not.
+# The data I used was from:
+# http://archive.ics.uci.edu/ml/datasets/Congressional+Voting+Records
+
 import pandas as pd
 import numpy as np
 
