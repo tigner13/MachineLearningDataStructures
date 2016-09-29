@@ -7,11 +7,11 @@ import pandas as pd
 import numpy as np
 
 # importing data
-df = pd.read_csv('house-votes-84.data')
+df = pd.read_csv('house-votes-84-mini.data')
 
 #building data structure for trees
 class treeNode:
-    def __init__(left, right,dataset):
+    def __init__(self,left, right,dataset):
         self.left = left
         self.right = right
         self.dataset = dataset
@@ -40,4 +40,14 @@ def split(field):
 
 # this function is constructing the tree
 def construct(field):
-     mainNode = treeNode(
+     if((field.count()[0] == 1) or p(field) == 1):
+         return field
+     else:
+         L = field[field[split(field)] == 'y']
+         R = field[field[split(field)] != 'y']
+         return treeNode(construct(L),construct(R),field)
+
+
+node = construct(df)
+print "Main"
+print node.left
