@@ -40,4 +40,4 @@ def split(field):
 
 # this function is constructing the tree
 def construct(field):
-     mainNode = treeNode()
+     mainNode = treeNode(
