@@ -12,7 +12,7 @@ df = pd.read_csv('house-votes-84.data')
 #this function find the probability that a field is republican
 #
 def p(field):
-    return (field[field['p'] == 'republican'].count() / field.count())[0]
+    return ((field[field['p'] == 'republican']).count()/field.count())[0]
 
 # This is a function for the Gini measure of impurity.
 # measures how often a randomly chosen element from a set would be incorectly
@@ -20,11 +20,17 @@ def p(field):
 # example of impurity: a set with all true/ a set with all false
 # equation: G(t) = 1- p(t)^2 - (1 - p(t))^2
 def gini(field):
-     return (1 - (p(field)*p(field)) - ((1 -  p(field))*(1 - p(field))))
+    return (1 - (p(field)*p(field)) - ((1 -  p(field))*(1 - p(field))))
 
 #This choses what collumn to split at by using gini
 def split(field):
-    splitCol = 1
+    splitCol = list(field)[1]
     for column in field:
-        if (gini(field[column]) > gini(field[splitCol])) splitCol = column
-    return splitCol
+        new = field[field[column] == 'y']
+        compare = field[field[splitCol] == 'y']
+        if (gini(new) > gini(compare)):
+            print gini(new)
+            splitCol = column
+    return column
+
+print split(df)
