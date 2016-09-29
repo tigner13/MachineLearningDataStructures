@@ -30,24 +30,26 @@ def p(field):
 def gini(field):
     return (1 - (p(field)*p(field)) - ((1 -  p(field))*(1 - p(field))))
 
+
 #This choses what collumn to split at by using gini
 def split(field):
     splitCol = list(field)[1]
     for column in field:
-        if (gini(field[field[column] == 'y']) > gini(field[field[splitCol] == 'y'])):
+        if (gini(field[field[column] == 'y']) < gini(field[field[splitCol] == 'y'])):
             splitCol = column
-    return column
+    return splitCol
 
 # this function is constructing the tree
+#current problem is that it is spliting at the smae node everytime
 def construct(field):
      if((field.count()[0] == 1) or p(field) == 1):
          return field
      else:
          L = field[field[split(field)] == 'y']
          R = field[field[split(field)] != 'y']
-         return treeNode(construct(L),construct(R),field)
+         node = treeNode(construct(L),construct(R),field)
+         print node.left
 
 
-node = construct(df)
-print "Main"
-print node.left
+
+print split(df)
