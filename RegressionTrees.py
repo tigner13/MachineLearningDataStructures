@@ -1,15 +1,23 @@
 # Classification and Regression Trees (CART) are an applied application of
-# recursionWe take a set of training data set and split it into a bunch of
+# recursion. We take a set of training data set and split it into a bunch of
 # nested trees
 #
 
 import pandas as pd
 import numpy as np
 
-#importing data
+# importing data
 df = pd.read_csv('house-votes-84.data')
 
-#this function find the probability that a field is republican
+#building data structure for trees
+class treeNode:
+    def __init__(left, right,dataset):
+        self.left = left
+        self.right = right
+        self.dataset = dataset
+
+
+# this function find the probability that a field is republican
 #
 def p(field):
     return ((field[field['p'] == 'republican']).count()/field.count())[0]
