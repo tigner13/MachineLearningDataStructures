@@ -38,4 +38,6 @@ def split(field):
             splitCol = column
     return column
 
-print split(df)
+# this function is constructing the tree
+def construct(field):
+     mainNode = treeNode()
