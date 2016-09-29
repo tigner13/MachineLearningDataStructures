@@ -26,10 +26,7 @@ def gini(field):
 def split(field):
     splitCol = list(field)[1]
     for column in field:
-        new = field[field[column] == 'y']
-        compare = field[field[splitCol] == 'y']
-        if (gini(new) > gini(compare)):
-            print gini(new)
+        if (gini(field[field[column] == 'y']) > gini(field[field[splitCol] == 'y'])):
             splitCol = column
     return column
 
