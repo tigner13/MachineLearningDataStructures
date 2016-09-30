@@ -11,7 +11,7 @@ df = pd.read_csv('house-votes-84-mini.data')
 
 #building data structure for trees
 class treeNode:
-    def __init__(self,left, right,dataset):
+    def __init__(self, dataset, left=None, right=None):
         self.left = left
         self.right = right
         self.dataset = dataset
@@ -43,14 +43,14 @@ def split(field):
 #current problem is that it is spliting at the smae node everytime
 def construct(field):
      if((field.count()[0] == 1) or (field.count()[0] == 0) or p(field) == 1):
-         return field
+         return treeNode(field)
      else:
          splitC = split(field)
          L = field[field[splitC] == 'y']
          L =L.drop(splitC,axis=1)
          R = field[field[split(field)] != 'y']
          R = R.drop(splitC,axis=1)
-         return treeNode(construct(L),construct(R),field)
+         return treeNode(field,construct(L),construct(R))
 
 def printTree(root):
     level = root
@@ -59,8 +59,9 @@ def printTree(root):
         if (level != root):
             for n in level:
                 print n.dataset
-                if n.left: nextLevel.append(n.left)
-                if not(n.right).empty: nextLevel.append(n.right)
+                if n.left: nextLevel.append(n.right)
+                if n.right: nextLevel.append(n.right)
+
         else:
             print level.dataset
             if level.left: nextLevel.append(level.left)
