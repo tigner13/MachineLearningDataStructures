@@ -42,14 +42,15 @@ def split(field):
 # this function is constructing the tree
 #current problem is that it is spliting at the smae node everytime
 def construct(field):
-     if((field.count()[0] == 1) or p(field) == 1):
+     if((field.count()[0] == 1) or (field.count()[0] == 0) or p(field) == 1):
          return field
      else:
-         L = field[field[split(field)] == 'y']
+         splitC = split(field)
+         L = field[field[splitC] == 'y']
+         L =L.drop(splitC,axis=1)
          R = field[field[split(field)] != 'y']
-         node = treeNode(construct(L),construct(R),field)
-         print node.left
+         R = R.drop(splitC,axis=1)
+         return treeNode(construct(L),construct(R),field)
 
 
-
-print split(df)
+construct(df)
