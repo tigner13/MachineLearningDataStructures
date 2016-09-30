@@ -52,5 +52,20 @@ def construct(field):
          R = R.drop(splitC,axis=1)
          return treeNode(construct(L),construct(R),field)
 
+def printTree(root):
+    level = root
+    while level:
+        nextLevel = list()
+        if (level != root):
+            for n in level:
+                print n.dataset
+                if n.left: nextLevel.append(n.left)
+                if not(n.right).empty: nextLevel.append(n.right)
+        else:
+            print level.dataset
+            if level.left: nextLevel.append(level.left)
+            if level.right: nextLevel.append(level.right)
+        print
+        level = nextLevel
 
-construct(df)
+printTree(construct(df))
