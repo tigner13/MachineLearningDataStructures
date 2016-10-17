@@ -58,12 +58,14 @@ def printTree(root):
         nextLevel = list()
         if (level != root):
             for n in level:
-                print n.dataset
+                print p(n.dataset)
+                print split(n.dataset)
+
                 if n.left: nextLevel.append(n.right)
                 if n.right: nextLevel.append(n.right)
 
         else:
-            print level.dataset
+            print split(level.dataset)
             if level.left: nextLevel.append(level.left)
             if level.right: nextLevel.append(level.right)
         print

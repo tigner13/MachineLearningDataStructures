@@ -25,10 +25,14 @@ def bayes(person, party):
     for vote in person:
         (prob(Party, billnum, vote))
         billnum +=1
-    p = p* (Party.count() / df.count())[0]
+    p = p * (Party.count() / df.count())[0]
     return p
 
-
+def party(person):
+    republican = bayes(person, 'republican')
+    democrat = bayes(person, 'democrat')
+    if (republican > democrat): print "republican"
+    print "democrat"
 
 person = ['n','y','y','y','y','y','n','n','n','y','y','n','y','y','n','n']
-print bayes(person, 'republican') / (bayes(person, 'democrat') + bayes(person, 'republican'))
+print party(person)
