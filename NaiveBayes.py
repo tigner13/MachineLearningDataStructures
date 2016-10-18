@@ -8,12 +8,18 @@
 import pandas as pd
 import numpy as np
 
-df = pd.read_csv('house-votes-84.data')
 class NaiveBayes(object):
 
-    def __init__(self, file):
-        self.file = file
-        self.df = pd.read_csv(file)
+    '''
+    Function Discription:
+    intializer of NaiveBayes Bayes
+    Inputs
+    base: a fd of the base peole we are running our tests off
+    test: a df of the the people we are testing
+    '''
+    def __init__(self, base, test):
+        self.base = pd.read_csv(base)
+        self.test = pd.read_csv(test)
 
     '''
     Function Discription:
@@ -43,12 +49,12 @@ class NaiveBayes(object):
     def bayes(self,person, party):
         billnum =1;
         p=1
-        Party = df[df['p'] == party]
+        Party = base[base['p'] == party]
         for vote in person:
             pr = (self.prob(Party, billnum, vote))
             billnum +=1
             p = p*pr
-        p = p * (Party.count() / df.count())[0]
+        p = p * (Party.count() / base.count())[0]
         return p
 
     '''
@@ -78,7 +84,6 @@ class NaiveBayes(object):
         person.pop(0)
         if(party == self.prediction(person)): return 1
         else: return 0
-
 
 n='n'
 y='y'
