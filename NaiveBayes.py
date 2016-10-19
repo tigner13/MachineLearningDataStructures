@@ -107,14 +107,10 @@ def kFoldSplit(df, folds):
     p1 = 0;
     p2 = (len(df)/folds)
     for i in range(1,folds+1):
-        print i
         if (p2 > len(df)): p2 = len(df)
-        v= df[p1:p2]
-
-        dfarray.append(v)
+        dfarray.append(df[p1:p2])
         p1 += (len(df)/folds)
         p2 = p1 + (len(df)/folds)
-
     print dfarray[folds-1]
 
 
