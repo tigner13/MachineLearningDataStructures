@@ -8,8 +8,13 @@
 import pandas as pd
 import numpy as np
 
-class NaiveBayes(object):
+"""global variables"""
+n='n'
+y='y'
+democrat = 'democrat'
+republican = 'republican'
 
+class NaiveBayes(object):
     '''
     Function Discription:
     intializer of NaiveBayes Bayes
@@ -18,13 +23,14 @@ class NaiveBayes(object):
     test: a df of the the people we are testing
     '''
     def __init__(self, base, test):
-        self.base = pd.read_csv(base)
-        self.test = pd.read_csv(test)
+        self.base = base
+        self.test = test
 
     '''
     Function Discription:
     Inputs
-    party: a subset of the origional dataframe in which it only includes the members of the "party" party
+    party: a subset of the origional dataframe in which it only includes the
+    members of the "party" party
     i: the bill number you are anzalyzing
     vote: if the person you are analyzing voted yes or no on the bill
 
@@ -85,10 +91,33 @@ class NaiveBayes(object):
         if(party == self.prediction(person)): return 1
         else: return 0
 
-n='n'
-y='y'
-democrat = 'democrat'
-republican = 'republican'
+    """
+    This function find the accuracy of the program
+    """
+    def efficiency(self):
+        num = 0
+        for row in self.test.row:
+            num = num + self.corect(row)
+        return (num/len(self.test))
+
+
+def kFoldSplit(df, folds):
+    array = np.array_split(df,100)
+    dfarray = []
+    p1 = 0;
+    p2 = (len(df)/folds)
+    for i in range(1,folds+1):
+        print i
+        if (p2 > len(df)): p2 = len(df)
+        v= df[p1:p2]
+
+        dfarray.append(v)
+        p1 += (len(df)/folds)
+        p2 = p1 + (len(df)/folds)
+
+    print dfarray[folds-1]
+
+
+
 person = [democrat,n,n,y,n,n,y,n,y,n,y,y,n,n,n,y,y]
-program = NaiveBayes('house-votes-84.data')
-program.corect(person)
+kFoldSplit(pd.read_csv('house-votes-84.data'), 4)
