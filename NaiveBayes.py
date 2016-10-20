@@ -25,7 +25,10 @@ class NaiveBayes(object):
     def __init__(self, base, test):
         self.base = base
         self.test = test
-
+        self.base.columns = ['p','0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15']
+        self.test.columns = ['p','0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15']
+        self.test = self.test.reset_index(drop=True)
+        self.base = self.test.reset_index(drop=True)
     '''
     Function Discription:
     Inputs
@@ -55,12 +58,12 @@ class NaiveBayes(object):
     def bayes(self,person, party):
         billnum =1;
         p=1
-        Party = base[base['p'] == party]
+        Party = self.base[self.base['p'] == party]
         for vote in person:
             pr = (self.prob(Party, billnum, vote))
             billnum +=1
             p = p*pr
-        p = p * (Party.count() / base.count())[0]
+        p = p * (Party.count() / self.base.count())[0]
         return p
 
     '''
@@ -96,13 +99,14 @@ class NaiveBayes(object):
     """
     def efficiency(self):
         num = 0
-        for row in self.test.row:
+        rows = map(list,self.test.values)
+        for row in rows:
             num = num + self.corect(row)
-        return (num/len(self.test))
+
+        return (float(num)/float(len(self.test)))
 
 
 def kFoldSplit(df, folds):
-    array = np.array_split(df,100)
     dfarray = []
     p1 = 0;
     p2 = (len(df)/folds)
@@ -111,9 +115,9 @@ def kFoldSplit(df, folds):
         dfarray.append(df[p1:p2])
         p1 += (len(df)/folds)
         p2 = p1 + (len(df)/folds)
-    print dfarray[folds-1]
+    return dfarray
 
+array = kFoldSplit(pd.read_csv('house-votes-84.data'), 4)
 
-
-person = [democrat,n,n,y,n,n,y,n,y,n,y,y,n,n,n,y,y]
-kFoldSplit(pd.read_csv('house-votes-84.data'), 4)
+test = NaiveBayes(array[0], array[1])
+print test.efficiency()
