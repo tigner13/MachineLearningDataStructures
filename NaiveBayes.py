@@ -128,4 +128,5 @@ def kFoldTest(df, f):
     print "average: %r" %average
 
 
-kFoldTest(pd.read_csv('house-votes-84.data'), 10)
+for i in range(2,11):
+    kFoldTest(pd.read_csv('house-votes-84.data'), i)
