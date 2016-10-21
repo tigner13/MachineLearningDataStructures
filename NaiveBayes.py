@@ -102,22 +102,30 @@ class NaiveBayes(object):
         rows = map(list,self.test.values)
         for row in rows:
             num = num + self.corect(row)
-
         return (float(num)/float(len(self.test)))
 
-
-def kFoldSplit(df, folds):
-    dfarray = []
+"""
+This folds the df in to f pieces
+"""
+def kFoldTest(df, f):
+    df = df.reindex(np.random.permutation(df.index))
+    average = 0
     p1 = 0;
-    p2 = (len(df)/folds)
-    for i in range(1,folds+1):
+    p2 = (len(df)/f)
+    print ("\n----%r Fold----" %f)
+    for i in range(1,f+1):
         if (p2 > len(df)): p2 = len(df)
-        dfarray.append(df[p1:p2])
-        p1 += (len(df)/folds)
-        p2 = p1 + (len(df)/folds)
-    return dfarray
+        test = df[p1:p2]
+        base = df
+        base.drop(base.index[p1:p2])
+        naive = NaiveBayes(base, test)
+        eff = naive.efficiency()
+        print eff
+        average += eff
+        p1 += (len(df)/f)
+        p2 = p1 + (len(df)/f)
+    average = average/f
+    print "average: %r" %average
 
-array = kFoldSplit(pd.read_csv('house-votes-84.data'), 4)
 
-test = NaiveBayes(array[0], array[1])
-print test.efficiency()
+kFoldTest(pd.read_csv('house-votes-84.data'), 10)
