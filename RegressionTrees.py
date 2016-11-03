@@ -19,56 +19,13 @@ class treeNode:
 
 # this function find the probability that a field is republican
 #
-def p(field):
-    return ((field[field['p'] == 'republican']).count()/field.count())[0]
+def probability(field, party):
+    return ((field[field['p'] == party]).count()/field.count())[0]
 
-# This is a function for the Gini measure of impurity.
-# measures how often a randomly chosen element from a set would be incorectly
-# labled.
-# example of impurity: a set with all true/ a set with all false
-# equation: G(t) = 1- p(t)^2 - (1 - p(t))^2
-def gini(field):
-    return (1 - (p(field)*p(field)) - ((1 -  p(field))*(1 - p(field))))
+#purit: find the purity of a field using this logic
+def purity(field):
+    r = probability(field, 'republican')
+    d = 1-r
+    return (1 - (r*r) - (d*d))
 
-
-#This choses what collumn to split at by using gini
-def split(field):
-    splitCol = list(field)[1]
-    for column in field:
-        if (gini(field[field[column] == 'y']) < gini(field[field[splitCol] == 'y'])):
-            splitCol = column
-    return splitCol
-
-# this function is constructing the tree
-#current problem is that it is spliting at the smae node everytime
-def construct(field):
-     if((field.count()[0] == 1) or (field.count()[0] == 0) or p(field) == 1):
-         return treeNode(field)
-     else:
-         splitC = split(field)
-         L = field[field[splitC] == 'y']
-         L =L.drop(splitC,axis=1)
-         R = field[field[split(field)] != 'y']
-         R = R.drop(splitC,axis=1)
-         return treeNode(field,construct(L),construct(R))
-
-def printTree(root):
-    level = root
-    while level:
-        nextLevel = list()
-        if (level != root):
-            for n in level:
-                print p(n.dataset)
-                print split(n.dataset)
-
-                if n.left: nextLevel.append(n.right)
-                if n.right: nextLevel.append(n.right)
-
-        else:
-            print split(level.dataset)
-            if level.left: nextLevel.append(level.left)
-            if level.right: nextLevel.append(level.right)
-        print
-        level = nextLevel
-
-printTree(construct(df))
+print purity(df)
