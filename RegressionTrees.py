@@ -51,5 +51,18 @@ def split(field):
              maxCol = column
     return treeNode(field, split(field[field[maxCol] == 'y']), split(field[field[maxCol] != 'y']),maxCol,p)
 
+def classify(person, field):
+        node = split(df)
+        print (node.splitfeature)
 
-print split(df)
+        while True:
+            if person[int(node.splitfeature)] == 'y':
+                node = node.left
+            else:
+                node = node.right
+            if (node.right == None):
+                break
+        print node.dataset['p']
+
+person = ['y','y','y','n','y','y','n','n','n','n','y','n','y','y','y','y']
+classify(person,df)
