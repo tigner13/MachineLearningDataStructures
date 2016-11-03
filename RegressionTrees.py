@@ -11,10 +11,12 @@ df = pd.read_csv('house-votes-84-mini.data')
 
 #building data structure for trees
 class treeNode:
-    def __init__(self, dataset, left=None, right=None):
+    def __init__(self, dataset, left=None, right=None,depth, splitfeature):
         self.left = left
         self.right = right
         self.dataset = dataset
+        self.depth = depth
+        self.splitfeature = splitfeature
 
 
 # this function find the probability that a field is republican
@@ -28,4 +30,12 @@ def purity(field):
     d = 1-r
     return (1 - (r*r) - (d*d))
 
-print purity(df)
+def gini(field, splitCol):
+    right = field[field[splitCol] == 'y']
+    left =field[field[splitCol] != 'y']
+    rightPurity = purity(right)
+    leftPurity = purity(left)
+    selfPurity = purity(field)
+    return selfPurity - (rightPurity*rightPurity) - (leftPurity*leftPurity)
+
+print gini(df,'0')
