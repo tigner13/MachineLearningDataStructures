@@ -10,13 +10,13 @@ import numpy as np
 df = pd.read_csv('house-votes-84-mini.data')
 
 #building data structure for trees
-class treeNode:
-    def __init__(self, dataset, left=None, right=None,depth, splitfeature):
-        self.left = left
-        self.right = right
-        self.dataset = dataset
-        self.depth = depth
-        self.splitfeature = splitfeature
+#class treeNode:
+#    def __init__(self, dataset, left=None, right=None,depth, splitfeature):
+#        self.left = left
+#        self.right = right
+#        self.dataset = dataset
+#        self.depth = depth
+#        self.splitfeature = splitfeature
 
 
 # this function find the probability that a field is republican
@@ -24,18 +24,33 @@ class treeNode:
 def probability(field, party):
     return ((field[field['p'] == party]).count()/field.count())[0]
 
-#purit: find the purity of a field using this logic
+#purity: find the purity of a field using this logic
 def purity(field):
+
     r = probability(field, 'republican')
     d = 1-r
     return (1 - (r*r) - (d*d))
 
-def gini(field, splitCol):
-    right = field[field[splitCol] == 'y']
-    left =field[field[splitCol] != 'y']
+def gini(field, col):
+    right = field[field[col] == 'y']
+    left =field[field[col] != 'y']
     rightPurity = purity(right)
     leftPurity = purity(left)
     selfPurity = purity(field)
     return selfPurity - (rightPurity*rightPurity) - (leftPurity*leftPurity)
 
-print gini(df,'0')
+def split(field):
+    maxGini = gini(field, '1')
+    maxCol = '1'
+    for column in df:
+        g = gini(field,column)
+        print column
+        print g
+        if (g > maxGini):
+             maxGini = g
+             maxCol = column
+    print "MAX!!!!"
+    print maxCol
+    print maxGini
+
+split(df)
