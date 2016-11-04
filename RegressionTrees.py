@@ -34,7 +34,8 @@ def purity(field):
     if field.empty: return 1
     r = probability(field, 'republican')
     d = 1-r
-    return (1 - (r*r) - (d*d))
+
+    return  1 - (r*r) - (d*d)
 
 def gini(field, col):
     right = field[field[col] == 'y']
@@ -76,6 +77,16 @@ def correct(person,node):
 #print correct(person,n)
 
 
+def printTree(node):
+    if node == None: return
+    print"\n"
+    print node.dataset
+    printTree(node.right)
+    printTree(node.left)
+
+
+
+
 
 ##Testing purposes###
 def efficiency(training, testing):
@@ -102,9 +113,9 @@ def kFoldTest(field, folds):
     print ("\n----%r Fold----" %folds)
     for i in range(1,folds+1):
         if (p2 > len(df)): p2 = len(df)
-        testing = df[p1:p2]
-        training= df
-        training.drop(training.index[p1:p2])
+        training = df[p1:p2]
+        testing= df
+        testing.drop(testing.index[p1:p2])
         eff = efficiency(training,testing)
         print eff
         average += eff
@@ -113,4 +124,7 @@ def kFoldTest(field, folds):
     average = average/folds
     print "average: %r" %average
 
-kFoldTest(pd.read_csv('house-votes-84.data'), 10)
+
+
+for i in range(2,11):
+    kFoldTest(pd.read_csv('house-votes-84.data'), i)
