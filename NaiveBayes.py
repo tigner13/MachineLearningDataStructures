@@ -114,6 +114,7 @@ def kFoldTest(df, f):
     p2 = (len(df)/f)
     print ("\n----%r Fold----" %f)
     for i in range(1,f+1):
+
         if (p2 > len(df)): p2 = len(df)
         test = df[p1:p2]
         base = df

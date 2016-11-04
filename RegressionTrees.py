@@ -6,6 +6,11 @@
 import pandas as pd
 import numpy as np
 
+n='n'
+y='y'
+democrat = 'democrat'
+republican = 'republican'
+
 # importing data
 df = pd.read_csv('house-votes-84-mini.data')
 
@@ -51,10 +56,7 @@ def split(field):
              maxCol = column
     return treeNode(field, split(field[field[maxCol] == 'y']), split(field[field[maxCol] != 'y']),maxCol,p)
 
-def classify(person, field):
-        node = split(df)
-        print (node.splitfeature)
-
+def classify(person, node):
         while True:
             if person[int(node.splitfeature)] == 'y':
                 node = node.left
@@ -62,7 +64,53 @@ def classify(person, field):
                 node = node.right
             if (node.right == None):
                 break
-        print node.dataset['p']
+        return node.dataset.iloc[0,0]
+def correct(person,node):
+    party = person[0]
+    person.pop(0)
+    if(party == classify(person,node)): return 1
+    else: return 0
 
-person = ['y','y','y','n','y','y','n','n','n','n','y','n','y','y','y','y']
-classify(person,df)
+#n = split(df)
+#person = ['republican','n','y','n','y','y','y','n','n','n','n','n','n','y','y','n','y']
+#print correct(person,n)
+
+
+
+##Testing purposes###
+def efficiency(training, testing):
+    training.columns = ['p','0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15']
+    testing.columns = ['p','0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15']
+    training = training.reset_index(drop=True)
+    testing = testing.reset_index(drop=True)
+
+
+    node = split(training)
+    accuracy = 0
+    rows = map(list,testing.values)
+    for row in rows:
+        c = correct(row, node)
+        accuracy = accuracy + c
+
+    return (float(accuracy)/float(len(testing)))
+
+def kFoldTest(field, folds):
+    df = field.reindex(np.random.permutation(field.index))
+    average = 0
+    p1 = 0;
+    p2 = (len(df)/folds)
+    print ("\n----%r Fold----" %folds)
+    for i in range(1,folds+1):
+        if (p2 > len(df)): p2 = len(df)
+        testing = df[p1:p2]
+        training= df
+        training.drop(training.index[p1:p2])
+        eff = efficiency(training,testing)
+        print eff
+        average += eff
+        p1 += (len(df)/folds)
+        p2 = p1 + (len(df)/folds)
+    average = average/folds
+    print "average: %r" %average
+
+kFoldTest(pd.read_csv('house-votes-84.data'), 10)
