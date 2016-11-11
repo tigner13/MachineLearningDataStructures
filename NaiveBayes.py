@@ -95,26 +95,26 @@ def efficiency(training, testing):
 """
 This folds the df in to f pieces
 """
-def kFoldTest(df, f):
-    df = df.reindex(np.random.permutation(df.index))
+def kFoldTest(field, folds):
+    df = field.reindex(np.random.permutation(field.index))
     average = 0
     p1 = 0;
-    p2 = (len(df)/f)
-    print ("\n----%r Fold----" %f)
-    for i in range(1,f+1):
-        print "%r," %f
+    p2 = (len(df)/folds)
+
+    for i in range(1,folds+1):
+
         if (p2 > len(df)): p2 = len(df)
         training = df[p1:p2]
-        testing = df
-        testing.drop(training.index[p1:p2])
+        testing= df
+        testing.drop(testing.index[p1:p2])
         eff = efficiency(training,testing)
-        print "%r," %eff
+        print (p2-p1), ",",eff
         average += eff
-        p1 += (len(df)/f)
-        p2 = p1 + (len(df)/f)
-    average = average/f
-    print "%r\n" %average
+        p1 += (len(df)/folds)
+        p2 = p1 + (len(df)/folds)
+    average = average/folds
+    print (p2-p1), ",", average
 
-
-for i in range(2,50):
-    kFoldTest(pd.read_csv('house-votes-84.data'), i)
+df = pd.read_csv('house-votes-84.data')
+for i in range(2,10):
+    kFoldTest(df, i)
