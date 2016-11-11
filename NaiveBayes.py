@@ -102,18 +102,19 @@ def kFoldTest(df, f):
     p2 = (len(df)/f)
     print ("\n----%r Fold----" %f)
     for i in range(1,f+1):
+        print "%r," %f
         if (p2 > len(df)): p2 = len(df)
         training = df[p1:p2]
         testing = df
         testing.drop(training.index[p1:p2])
         eff = efficiency(training,testing)
-        print eff
+        print "%r," %eff
         average += eff
         p1 += (len(df)/f)
         p2 = p1 + (len(df)/f)
     average = average/f
-    print "average: %r" %average
+    print "%r\n" %average
 
 
-for i in range(2,11):
+for i in range(2,50):
     kFoldTest(pd.read_csv('house-votes-84.data'), i)

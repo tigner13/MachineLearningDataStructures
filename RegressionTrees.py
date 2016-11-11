@@ -5,6 +5,7 @@
 
 import pandas as pd
 import numpy as np
+import sys
 
 n='n'
 y='y'
@@ -110,21 +111,21 @@ def kFoldTest(field, folds):
     average = 0
     p1 = 0;
     p2 = (len(df)/folds)
-    print ("\n----%r Fold----" %folds)
+
     for i in range(1,folds+1):
+
         if (p2 > len(df)): p2 = len(df)
         training = df[p1:p2]
         testing= df
         testing.drop(testing.index[p1:p2])
         eff = efficiency(training,testing)
-        print eff
+        print (p2-p1), ",",eff
         average += eff
         p1 += (len(df)/folds)
         p2 = p1 + (len(df)/folds)
     average = average/folds
-    print "average: %r" %average
+    print (p2-p1), ",", average
 
 
-
-for i in range(2,11):
+for i in range(12,50):
     kFoldTest(pd.read_csv('house-votes-84.data'), i)
