@@ -61,7 +61,6 @@
 43 , 0.935483870968
 43 , 0.930875576037
 43 , 0.921658986175
-root@LAPTOP-ET:/mnt/c/Users/Owner/Desktop/Research/MachineLearningDataStructures# python RegressionTrees.py
 36 , 0.942396313364
 36 , 0.944700460829
 36 , 0.940092165899
