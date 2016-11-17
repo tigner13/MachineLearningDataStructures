@@ -10,22 +10,34 @@ plot((rTrees$X1),(rTrees$X2), type = "p", main = "Regression Tree Prediction Acc
      xlab = "Ammount of Training data", ylab="Accuracy Percentage")
 
 
-
-
 # install packages
 library(rpart)
 install.packages("rpart.plot")
 library(rpart.plot)
 
-# learn CART tree with default parameters
-dTree <- rpart(Class ~ SepalLength + SepalWidth + PetalLength + PetalWidth + SepalArea + PetalArea + pcaF, method="class", data=d3)
-summary(dTree)
-               
-# display learned tree
-prp(dTree)
-prp(dTree,type=4, extra=1)
-               
-# explore settings
-dTree2 <- rpart(Class ~ SepalLength + SepalWidth + PetalLength + PetalWidth + SepalArea + PetalArea + pcaF, method="class", data=d3, (parms=list(split="information"))
+df <- read.csv("house-votes-84.data", header = FALSE)
+names(df)[1] ="party"
+names(df)[2] = "handicapped-infants"
+names(df)[3] = "water-project"
+names(df)[4] = "budget"
+names(df)[5] =  "physician-fee-freeze"
+names(df)[6] =  "el-salvador aid"
+names(df)[7] =  "religion in schools"
+names(df)[8] =  "anti-satellite"
+names(df)[9] = "nicaraguan aid"
+names(df)[10] = "missile"
+names(df)[11] = "immigration"
+names(df)[12] = "synfuel cutback"
+names(df)[13] = "education spending"
+names(df)[14] = "superfund right to sue"
+names(df)[15] = "crime"
+names(df)[16] = "duty free exports"
+names(df)[17] = "south africa"
 
-dTree3 <- rpart(Class ~ SepalLength + SepalWidth + PetalLength + PetalWidth + SepalArea + PetalArea + pcaF, method="class", data=d3, control=rpart.control(minsplit=5))
+
+
+treePrint <- rpart(party~.,data = df, method = "class", control=rpart.control(minsplit=1, cp=0))
+treePrint
+printcp(treePrint)
+plot(treePrint, uniform=TRUE,main="Congress Regression Tree")
+text(treePrint, use.n=TRUE, all=TRUE, cex=.7)

@@ -80,7 +80,7 @@ def corect(data, person):
     """
 This function find the accuracy of the program
 """
-def efficiency(training, testing):
+def efficiency(testing, training):
     training.columns = ['p','0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15']
     testing.columns = ['p','0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15']
     training = training.reset_index(drop=True)
@@ -88,6 +88,7 @@ def efficiency(training, testing):
 
     num = 0
     rows = map(list,testing.values)
+
     for row in rows:
         num = num + corect(testing, row)
     return (float(num)/float(len(testing)))
@@ -107,6 +108,7 @@ def kFoldTest(field, folds):
         training = df[p1:p2]
         testing= df
         testing.drop(testing.index[p1:p2])
+
         eff = efficiency(training,testing)
         print (p2-p1), ",",eff
         average += eff
@@ -116,5 +118,7 @@ def kFoldTest(field, folds):
     print (p2-p1), ",", average
 
 df = pd.read_csv('house-votes-84.data')
-for i in range(2,10):
+
+
+for i in range(2,20):
     kFoldTest(df, i)
