@@ -17,12 +17,13 @@ df = pd.read_csv('house-votes-84-mini.data')
 
 #building data structure for trees
 class treeNode:
-    def __init__(self, dataset, left, right, splitfeature,purity):
+    def __init__(self, dataset, left, right, splitfeature,purity,party):
         self.dataset = dataset
         self.left = left
         self.right = right
         self.splitfeature = splitfeature
         self.purity = purity
+        self.party=party
 
 
 # this function find the probability that a field is republican
@@ -46,9 +47,14 @@ def gini(field, col):
     selfPurity = purity(field)
     return selfPurity - (rightPurity*rightPurity) - (leftPurity*leftPurity)
 
+def party(field):
+    p = probability(field,'republican')
+    if (p > .5): return 'republican'
+    return 'democrat'
+
 def split(field):
     p = purity(field)
-    if(p == 0): return treeNode(field, None, None, None,p)
+    if(p == 0): return treeNode(field, None, None, None,p,party(field))
     maxGini = gini(field, '1')
     maxCol = '1'
     for column in df:
@@ -56,7 +62,7 @@ def split(field):
         if (g > maxGini):
              maxGini = g
              maxCol = column
-    return treeNode(field, split(field[field[maxCol] == 'y']), split(field[field[maxCol] != 'y']),maxCol,p)
+    return treeNode(field, split(field[field[maxCol] == 'y']), split(field[field[maxCol] != 'y']),maxCol,p,party(field))
 
 def classify(person, node):
         while True:
@@ -66,7 +72,7 @@ def classify(person, node):
                 node = node.right
             if (node.right == None):
                 break
-        return node.dataset.iloc[0,0]
+        return node.party
 def correct(person,node):
     party = person[0]
     person.pop(0)

@@ -35,9 +35,20 @@ rTrees$V1 <- gsub(pattern = " ", replacement = "", rTrees$V1,fixed = TRUE)
 rTrees <- data.frame(do.call('rbind', strsplit(as.character(rTrees$V1),',',fixed = T)))
 rTrees$X1 <- as.numeric(as.character(rTrees$X1))
 rTrees$X2 <- as.numeric(as.character(rTrees$X2))
+
+nBayes <- read.delim("naiveBayesData.txt", header=F)
+nBayes$V1 <- gsub(pattern = " ", replacement = "", nBayes$V1,fixed = TRUE)
+nBayes <- data.frame(do.call('rbind', strsplit(as.character(nBayes$V1),',',fixed = T)))
+nBayes$X1 <- as.numeric(as.character(nBayes$X1))
+nBayes$X2 <- as.numeric(as.character(nBayes$X2))
+nBayes <- nBayes[nBayes$X2 <.93,]
 ```
 This Project was to learn and make two simple machinelearning node prediction models. The two models I learned were Regression Trees and Naive Bayes. I wrote these programs in python. I then tested them using different k folds to test teh accuracy of the programs 
 
+##Niave Bayes Testing Results
+```{r, fig.width=8, fig.height=8}
+ plot((nBayes$X1),(nBayes$X2), main = "Naive Bayes Prediction Accuracy", xlab = "Ammount of Training data", ylab="Accuracy Percentage", ylim= c(.5,.95))
+```
 
 ##Regression Tree Testing Results 
 Here are my results from testing the Regression Tree program. The X axis is the amount of training data and the Y axis is the accuracy of the program
@@ -73,9 +84,9 @@ plot(forthTree, uniform=TRUE,main="Congress Regression Tree - Forth Data")
 text(forthTree, use.n=TRUE, all=TRUE, cex=.7)
 ```
 
-Eigth
+Less than 50 Points -- when accuracy started delcining by a lot
 ```{r,fig.width=13, fig.height=8}
-eighthdf <- df[1:254,]
+eighthdf <- df[1:54,]
 eigthTree <- rpart(party~.,data = eighthdf, method = "class", control=rpart.control(minsplit=1, cp=0))
 printcp(eigthTree)
 plot(eigthTree, uniform=TRUE,main="Congress Regression Tree - Eigth Data")

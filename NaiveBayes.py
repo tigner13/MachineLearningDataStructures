@@ -60,9 +60,9 @@ Output
 The prediction if it is a republican or democrat
 '''
 def prediction(data, person):
-    republican = bayes(data, person, 'republican')
-    democrat = bayes(data, person, 'democrat')
-    if (republican > democrat): return 'republican'
+    r = bayes(data, person, 'republican')
+    d = bayes(data, person, 'democrat')
+    if (r > d): return 'republican'
     else: return 'democrat'
 
 '''
@@ -80,7 +80,7 @@ def corect(data, person):
     """
 This function find the accuracy of the program
 """
-def efficiency(testing, training):
+def efficiency(training, testing):
     training.columns = ['p','0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15']
     testing.columns = ['p','0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15']
     training = training.reset_index(drop=True)
@@ -90,7 +90,7 @@ def efficiency(testing, training):
     rows = map(list,testing.values)
 
     for row in rows:
-        num = num + corect(testing, row)
+        num = num + corect(training, row)
     return (float(num)/float(len(testing)))
 
 """
@@ -100,9 +100,11 @@ def kFoldTest(field, folds):
     df = field.reindex(np.random.permutation(field.index))
     average = 0
     p1 = 0;
+
     p2 = (len(df)/folds)
 
-    for i in range(1,folds+1):
+
+    for i in range(1,4):
 
         if (p2 > len(df)): p2 = len(df)
         training = df[p1:p2]
@@ -110,6 +112,7 @@ def kFoldTest(field, folds):
         testing.drop(testing.index[p1:p2])
 
         eff = efficiency(training,testing)
+
         print (p2-p1), ",",eff
         average += eff
         p1 += (len(df)/folds)
@@ -120,5 +123,5 @@ def kFoldTest(field, folds):
 df = pd.read_csv('house-votes-84.data')
 
 
-for i in range(2,20):
+for i in range(20,30):
     kFoldTest(df, i)
