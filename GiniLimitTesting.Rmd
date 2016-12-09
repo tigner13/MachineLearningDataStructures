@@ -1,0 +1,64 @@
+---
+title: "Regression Trees Triming"
+author: "Elizabeth Tigner"
+date: "December 1, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+#setting up data from my tests for Regression Trees
+rTrees <- read.delim("rdata.txt", header = F)
+rTrees$V1 <- gsub(pattern = " ", replacement = "", rTrees$V1,fixed = TRUE)
+rTrees <- data.frame(do.call('rbind', strsplit(as.character(rTrees$V1),',',fixed = T)))
+rTrees$X1 <- as.numeric(as.character(rTrees$X1))
+rTrees$X2 <- as.numeric(as.character(rTrees$X2))
+
+#Setting up data for tests with limiting the gini to .14
+gini <- read.delim("GiniLimit.txt",header=F)
+gini$V1 <- gsub(pattern = " ", replacement = "", gini$V1,fixed = TRUE)
+gini <- data.frame(do.call('rbind', strsplit(as.character(gini$V1),',',fixed = T)))
+gini$X1 <- as.character(gini$X1)
+
+giniTraining <- subset(gini, gini$X1=='r')
+giniTesting <- subset(gini, gini$X1=='t')
+
+#setting up data for tests with limiting the gini to .24
+gini24 <- read.delim("GiniLimit24.txt", header=F)
+gini24$V1 <- gsub(pattern = " ", replacement = "", gini24$V1,fixed = TRUE)
+gini24 <- data.frame(do.call('rbind', strsplit(as.character(gini24$V1),',',fixed = T)))
+gini24$X1 <- as.character(gini24$X1)
+
+giniTraining24 <- subset(gini24, gini24$X1=='r')
+giniTesting24 <- subset(gini24, gini24$X1=='t')
+
+```
+
+##Regression Tree Testing Results 
+
+####No Gini Limit
+```{r}
+plot((rTrees$X1),(rTrees$X2), type = "p", main = "Regression Tree Prediction Accuracy", 
+     xlab = "Ammount of Training data", ylab="Accuracy Percentage",ylim= c(.5,1))
+lines(rTrees$X1,rep.int(1,length(rTrees$X1)),type = 'p', col='red')
+```
+
+####Gini Limit of .14
+```{r}
+plot(as.numeric(as.character(giniTesting$X2)), as.numeric(as.character(giniTesting$X3)), type = "p", main = "Regression Tree Prediction Accuracy -- Gini Limit .14", 
+     xlab = "Ammount of Training data", ylab="Accuracy Percentage",ylim= c(.5,1))
+
+lines(as.numeric(as.character(giniTraining$X2)), as.numeric(as.character(giniTraining$X3)), type = "p",
+     xlab = "Ammount of Training data", ylab="Accuracy Percentage",ylim= c(.5,1),col='red')
+
+```
+
+#### Gini Limit of .28
+```{r}
+plot(as.numeric(as.character(giniTesting24$X2)), as.numeric(as.character(giniTesting24$X3)), type = "p", main = "Regression Tree Prediction Accuracy -- Ginit Limit .28", 
+     xlab = "Ammount of Training data", ylab="Accuracy Percentage",ylim= c(.5,1))
+
+lines(as.numeric(as.character(giniTraining24$X2)), as.numeric(as.character(giniTraining24$X3)), type = "p",
+     xlab = "Ammount of Training data", ylab="Accuracy Percentage",ylim= c(.5,1),col='red')
+
+```
+

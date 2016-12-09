@@ -54,7 +54,7 @@ def party(field):
 
 def split(field):
     p = purity(field)
-    if(p == 0): return treeNode(field, None, None, None,p,party(field))
+    if(p < .24): return treeNode(field, None, None, None,p,party(field))
     maxGini = gini(field, '1')
     maxCol = '1'
     for column in df:
@@ -72,6 +72,7 @@ def classify(person, node):
                 node = node.right
             if (node.right == None):
                 break
+
         return node.party
 def correct(person,node):
     party = person[0]
@@ -90,9 +91,6 @@ def printTree(node):
     print node.dataset
     printTree(node.right)
     printTree(node.left)
-
-
-
 
 
 ##Testing purposes###
@@ -118,20 +116,29 @@ def kFoldTest(field, folds):
     p1 = 0;
     p2 = (len(df)/folds)
 
-    for i in range(1,folds+1):
+#test on trainingdata
 
+#testing on the testing data sets
+    for i in range(1,folds+1):
+        if(i > 15): break
         if (p2 > len(df)): p2 = len(df)
         training = df[p1:p2]
         testing= df
+
         testing.drop(testing.index[p1:p2])
+
+        traineff = efficiency(training, training)
+        print "r ,", (p2-p1), ",", traineff
+        if (traineff == 1): print training
+
         eff = efficiency(training,testing)
-        print (p2-p1), ",",eff
+        #print "t ,",(p2-p1), ",",eff
         average += eff
         p1 += (len(df)/folds)
         p2 = p1 + (len(df)/folds)
     average = average/folds
-    print (p2-p1), ",", average
+    #print "t ,", (p2-p1), ",", average
 
 
-for i in range(12,50):
-    kFoldTest(pd.read_csv('house-votes-84.data'), i)
+
+kFoldTest(pd.read_csv('house-votes-84.data'), 20)

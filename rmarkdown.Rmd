@@ -54,6 +54,7 @@ This Project was to learn and make two simple machinelearning node prediction mo
 Here are my results from testing the Regression Tree program. The X axis is the amount of training data and the Y axis is the accuracy of the program
 
 ```{r, fig.width=8, fig.height=8}
+plot((r))
 plot((rTrees$X1),(rTrees$X2), type = "p", main = "Regression Tree Prediction Accuracy", 
      xlab = "Ammount of Training data", ylab="Accuracy Percentage")
 ```
